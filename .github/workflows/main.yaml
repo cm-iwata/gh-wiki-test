@@ -20,8 +20,6 @@ jobs:
         with:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           aws-region: ap-northeast-1
-      - name: Verify AWS credentials
-        run: aws sts get-caller-identity
       - name: Clone wiki
         run: git clone https://github.com/${{ github.repository }}.wiki.git
       - name: create vectors
@@ -31,7 +29,7 @@ jobs:
           cd ${REPO_NAME}.wiki
           PAGES=$(jq -c .pages[] <<< $EVENT)
           echo $PAGES
-          sh ../create-vectors.sh "$EVENT"
+          bash ../create-vectors.sh "$EVENT"
         env:
           EVENT: ${{ toJson(github.event) }}
         shell: bash
