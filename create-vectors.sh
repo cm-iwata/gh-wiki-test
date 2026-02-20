@@ -2,13 +2,22 @@
 
 set -eo pipefail
 
-# 入力JSONの配列を受け取る
-# 例: ./script.sh '[{"text":"bbb"},{"text":"aaa"}]'
-INPUT_JSON="$1"
+# [
+#   {
+#     "action": "edited",
+#     "html_url": "https://github.com/cm-iwata/gh-wiki-test/wiki/new-page",
+#     "page_name": "new-page",
+#     "sha": "1de83f1bae8e478ef1cb8d8a626cf2af554afe64",
+#     "summary": null,
+#     "title": "new page"
+#   }
+# ]
 
-echo "$INPUT_JSON"
+PAGES="$1"
+
+echo "$PAGES"
 # JSONの要素数を取得
-ELEMENT_COUNT=$(echo "$INPUT_JSON" | jq 'length')
+ELEMENT_COUNT=$(echo "$PAGES" | jq 'length')
 echo "要素数: $ELEMENT_COUNT"
 
 # 要素数だけループ
@@ -17,8 +26,8 @@ for i in $(seq 0 $((ELEMENT_COUNT - 1))); do
     echo "処理中: インデックス $i"
 
     # JSON要素を取得
-    TEXT=$(echo "$INPUT_JSON" | jq -c ".[$i].text")
-    TITLE=$(echo "$INPUT_JSON" | jq -c ".[$i].title")
+    PAGE_NAME=$(echo "$PAGES" | jq -r ".[$i].page_name")
+    TEXT=$(cat "$PAGE_NAME")
     echo "要素: $TEXT"
 
     # Bedrockへの入力ファイルを生成

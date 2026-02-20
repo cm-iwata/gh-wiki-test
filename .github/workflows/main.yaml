@@ -24,12 +24,11 @@ jobs:
         run: git clone https://github.com/${{ github.repository }}.wiki.git
       - name: create vectors
         run: |
-
           REPO_NAME=$(echo "${{ github.repository }}" | cut -d '/' -f 2)
           cd ${REPO_NAME}.wiki
-          PAGES=$(jq -c .pages[] <<< $EVENT)
+          PAGES=$(jq -c .pages <<< $EVENT)
           echo $PAGES
-          bash ../create-vectors.sh "$EVENT"
+          bash ../create-vectors.sh "$PAGES"
         env:
           EVENT: ${{ toJson(github.event) }}
         shell: bash
