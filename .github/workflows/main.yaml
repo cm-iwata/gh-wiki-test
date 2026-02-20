@@ -1,16 +1,27 @@
-name: GollumTest
+name: Sync Bedrock Knowledge Base
 
 on: gollum
-
+permissions:
+  id-token: write
 jobs:
   job:
-
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-      - name: Dump github.event
-        env:
-          EVENT: ${{ toJson(github.event) }}
-        run: echo "${EVENT}"
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: ap-northeast-1
+      - name: Clone Wiki
+        run: git clone https://github.com/${{ github.repository }}.wiki.git --depth 1
+      - name: Sync wiki to S3
+        run: |
+          REPO_NAME=$(echo "${{ github.repository }}" | cut -d '/' -f 2)
+          cd ${REPO_NAME}.wiki
+          aws s3 sync . s3://${{ vars.VECTOR_SRC_BUCKET }} --exclude ".git/*" --delete
+        shell: bash
+      - name: Sync Knowledge Base
+        run: |
+          aws bedrock-agent start-ingestion-job --knowledge-base-id ${{ vars.KNOWLEDGE_BASE_ID }} --data-source-id ${{ vars.DATA_SOURCE_ID }}  
