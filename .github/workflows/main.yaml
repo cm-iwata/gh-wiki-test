@@ -32,4 +32,6 @@ jobs:
           bash ../create-vectors.sh "$PAGES"
         env:
           EVENT: ${{ toJson(github.event) }}
+          VECTOR_BUCKET: ${{ vars.VECTOR_BUCKET }}
+          VECTOR_INDEX: ${{ vars.VECTOR_INDEX }}
         shell: bash
