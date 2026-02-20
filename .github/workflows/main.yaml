@@ -1,4 +1,4 @@
-name: GollumTest
+name: Create Vectors
 
 on: gollum
 permissions:
@@ -20,16 +20,14 @@ jobs:
         with:
           role-to-assume: ${{ vars.AWS_ROLE_ARN }}
           aws-region: ap-northeast-1
-      - name: Clone wiki
-        run: git clone https://github.com/${{ github.repository }}.wiki.git
-      - name: create vectors
+      - name: Clone Wiki
+        run: git clone https://github.com/${{ github.repository }}.wiki.git --depth 1
+      - name: Save Vectors
         run: |
-
           REPO_NAME=$(echo "${{ github.repository }}" | cut -d '/' -f 2)
           cd ${REPO_NAME}.wiki
-          PAGES=$(jq -c .pages[] <<< $EVENT)
-          echo $PAGES
-          bash ../create-vectors.sh "$EVENT"
+          PAGES=$(jq -c .pages <<< $EVENT)
+          bash ../save-vectors.sh "$PAGES" ${{ vars.VECTOR_BUCKET }} ${{ vars.VECTOR_INDEX }}
         env:
-          EVENT: ${{ toJson(github.event) }}
+          EVENT: ${{ toJson(github.event) }} 
         shell: bash
