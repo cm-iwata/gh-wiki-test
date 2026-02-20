@@ -34,3 +34,4 @@ jobs:
           sh ../create-vectors.sh "$EVENT"
         env:
           EVENT: ${{ toJson(github.event) }}
+        shell: bash
