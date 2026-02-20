@@ -28,6 +28,7 @@ jobs:
           cd ${REPO_NAME}.wiki
           PAGES=$(jq -c .pages <<< $EVENT)
           echo $PAGES
+          pwd
           bash ../create-vectors.sh "$PAGES"
         env:
           EVENT: ${{ toJson(github.event) }}
