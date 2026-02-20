@@ -14,8 +14,6 @@ pwd
 # ]
 
 PAGES="$1"
-
-echo "$PAGES"
 # JSONの要素数を取得
 ELEMENT_COUNT=$(echo "$PAGES" | jq 'length')
 echo "要素数: $ELEMENT_COUNT"
@@ -32,7 +30,7 @@ for i in $(seq 0 $((ELEMENT_COUNT - 1))); do
 
     # Bedrockへの入力ファイルを生成
     echo "{\"inputText\": $TEXT}" > file.json
-
+    cat file.json
     # Bedrockでベクトル化
     aws bedrock-runtime invoke-model \
         --model-id amazon.titan-embed-text-v2:0 \
