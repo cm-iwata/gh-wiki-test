@@ -29,7 +29,7 @@ for i in $(seq 0 $((ELEMENT_COUNT - 1))); do
     echo "要素: $TEXT"
 
     # Bedrockへの入力ファイルを生成
-    echo "{\"inputText\": $TEXT}" > file.json
+    echo "{\"inputText\": \"$TEXT\"}" > file.json
     cat file.json
     # Bedrockでベクトル化
     aws bedrock-runtime invoke-model \
@@ -47,12 +47,12 @@ for i in $(seq 0 $((ELEMENT_COUNT - 1))); do
     cat > vector_upload.json << EOF
 [
   {
-    "key": ${TITLE},
+    "key": "${PAGE_NAME}",
     "data": {
       "float32": $(cat vector_data.json)
     },
     "metadata": {
-      "source_text": ${TEXT}
+      "source_text": "${TEXT}"
     }
   }
 ]

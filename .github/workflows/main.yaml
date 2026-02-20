@@ -1,4 +1,4 @@
-name: GollumTest
+name: Create Vectors
 
 on: gollum
 permissions:
