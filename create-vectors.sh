@@ -27,7 +27,7 @@ for i in $(seq 0 $((ELEMENT_COUNT - 1))); do
 
     # JSON要素を取得
     PAGE_NAME=$(echo "$PAGES" | jq -r ".[$i].page_name")
-    TEXT=$(cat "$PAGE_NAME")
+    TEXT=$(cat "$PAGE_NAME.md")
     echo "要素: $TEXT"
 
     # Bedrockへの入力ファイルを生成
