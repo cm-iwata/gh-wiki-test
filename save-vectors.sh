@@ -42,8 +42,7 @@ for i in $(seq 0 $((ELEMENT_COUNT - 1))); do
       "float32": $(cat vector_data.json)
     },
     "metadata": {
-      "source_text": $SOURCE_TEXT,
-      "category": "tutorial"
+      "source_text": $SOURCE_TEXT
     }    
   }
 ]
