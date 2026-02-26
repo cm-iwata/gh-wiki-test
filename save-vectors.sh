@@ -33,13 +33,18 @@ for i in $(seq 0 $((ELEMENT_COUNT - 1))); do
     jq -c '.embedding' output.json > vector_data.json
 
     # アップロード用のベクトルJSONを作成
+    SOURCE_TEXT=$(jq -n --arg text "$PAGE_CONTENT" '$text')
     cat > vector_upload.json << EOF
 [
   {
     "key": "${PAGE_NAME}",
     "data": {
       "float32": $(cat vector_data.json)
-    }
+    },
+    "metadata": {
+      "source_text": $SOURCE_TEXT,
+      "category": "tutorial"
+    }    
   }
 ]
 EOF
