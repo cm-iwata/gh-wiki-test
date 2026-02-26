@@ -6,6 +6,7 @@ set -eo pipefail
 PAGES="$1"
 VECTOR_BUCKET="$2"
 VECTOR_INDEX="$3"
+VECTOR_BUCKET_SRC="$4"
 
 # JSONの要素数を取得
 ELEMENT_COUNT=$(echo "$PAGES" | jq 'length')
@@ -20,6 +21,7 @@ for i in $(seq 0 $((ELEMENT_COUNT - 1))); do
     echo "処理中: $PAGE_NAME"
 
     PAGE_CONTENT=$(cat "$PAGE_NAME.md")
+    aws s3 cp "$PAGE_NAME.md" "s3://${VECTOR_BUCKET_SRC}/${PAGE_NAME}.md"
     
 
     jq -n --arg text "$PAGE_CONTENT" '{"inputText": $text}' > file.json
