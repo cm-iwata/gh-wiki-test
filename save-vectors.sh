@@ -39,9 +39,6 @@ for i in $(seq 0 $((ELEMENT_COUNT - 1))); do
     "key": "${PAGE_NAME}",
     "data": {
       "float32": $(cat vector_data.json)
-    },
-    "metadata": {
-      "source_text": "${PAGE_CONTENT}"
     }
   }
 ]
